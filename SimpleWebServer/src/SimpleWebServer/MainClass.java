@@ -37,7 +37,7 @@ public class MainClass {
 	
 	public static void main(String[] args) {
 		getServerConfig();
-		System.out.println(rootDir + ipAddress + port);
+		
 		try {
 			System.out.println(Integer.parseInt(port));
 			ServerSocket server = new ServerSocket(Integer.parseInt(port));
@@ -190,7 +190,6 @@ public class MainClass {
 		if (dirIndex == 1) fullPath += "\\index.html";
 		
 		if (dirIndex != 2) {
-			System.out.println(fullPath);
 			Path path = Paths.get(fullPath);
 			Path fileName = path.getFileName();
 			mimeType = getFileMimeType(fileName.toString());			
@@ -208,7 +207,6 @@ public class MainClass {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			System.out.println("disni yak");
 			
 			content = "<img src='data:" + mimeType + ";base64," + content + "'>";
 			
@@ -325,7 +323,6 @@ public class MainClass {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-        System.out.println("sss" + reqPath + "ddd");
 	}
 	
 	public static void parseReqMethod(String reqHeader) {
