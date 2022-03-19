@@ -17,9 +17,12 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -162,13 +165,42 @@ public class MainClass {
 				"<html>\r\n" + 
 				"<head>\r\n" + 
 				"<title>/" + reqPath + "</title>\r\n" + 
+				"<style>\r\n" + 
+				"        .tab1 {\r\n" + 
+				"            tab-size: 2;\r\n" + 
+				"        }\r\n" + 
+				"  \r\n" + 
+				"        .tab2 {\r\n" + 
+				"            tab-size: 4;\r\n" + 
+				"        }\r\n" + 
+				"  \r\n" + 
+				"        .tab4 {\r\n" + 
+				"            tab-size: 8;\r\n" + 
+				"        }\r\n" + 
+				"    </style>" +
 				"</head>\r\n" + 
 				"<body>";
 		for (File file : listDir) {
-			fileContent += "<a href='" ;
+			fileContent += "<pre class='tab1'><a href='" ;
 			if (!reqPath.isEmpty()) fileContent += "/";
+			
+			// Date Format
+			DateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+			format.setTimeZone(TimeZone.getTimeZone("Australia/Sydney"));
+	        String formatted = format.format(file.lastModified());
+			
+	        // File Size
+	        long fileSize;
+	        if (file.isFile()) {
+	        	fileSize = file.length();
+	        }
+	        else {
+	        	fileSize = FileUtils.sizeOfDirectory(file);
+	        }
+	        
 			fileContent += reqPath + "/" + file.getName() + "'>" + 
-					reqPath + "/" + file.getName() + "</a></br>";
+					reqPath + "/" + file.getName() + "</a>		" + fileSize + " bytes		" +
+					formatted + "</pre>";
 //			System.out.println("Path: " + reqPath);
 		}
 		fileContent += "</body>\r\n" + 
@@ -372,6 +404,7 @@ public class MainClass {
         	m = r.matcher(tmp);
         	if (m.find()) {
         		rootDir = m.group(1);
+        		rootDir = rootDir.substring(0, rootDir.length()-1);
         	}
         }
 	}
